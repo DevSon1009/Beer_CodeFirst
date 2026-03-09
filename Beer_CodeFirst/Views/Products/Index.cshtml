@@ -1,0 +1,163 @@
+﻿@model List<Beer_CodeFirst.Models.Product>
+<body class="products-page">
+
+    <h2 class="mb-4 fw-bold">🍺 Danh sách sản phẩm</h2>
+
+    <a href="@Url.Action("Create","Products")" class="btn btn-success mb-3 ">
+        ➕ Thêm sản phẩm
+    </a>
+    @using (Html.BeginForm("Index", "Products", FormMethod.Get, new { @class = "d-flex flex-row align-items-center flex-wrap mb-4" }))
+    {
+        <label for="search" class="mx-2 my-1"><i class="bi bi-search"></i> Tìm</label>
+        <div class="input-group w-auto">
+            <input type="search" value="@ViewBag.search" class="form-control" id="search" name="search" placeholder="Nhập tên bia..." value="@Request.QueryString["search"]" />
+            <button class="btn btn-primary" type="submit">GO</button>
+        </div>
+    }
+    <div class="d-flex align-items-center mb-4">
+
+        <span class="me-2 fw-semibold">Sắp xếp:</span>
+
+        <a href="@Url.Action("Index", new {
+        sortColumn = "ProductName",
+        iconClass = ViewBag.IconClass,
+        search = ViewBag.Search
+    })"
+           class="sort-btn @(ViewBag.SortColumn == "ProductName" ? "active-sort" : "")">
+
+            Tên sản phẩm
+
+            @if (ViewBag.SortColumn == "ProductName")
+            {
+                <i class="fa @ViewBag.IconClass ms-1"></i>
+            }
+        </a>
+
+        <a href="@Url.Action("Index", new {
+        sortColumn = "Price",
+        iconClass = ViewBag.IconClass,
+        search = ViewBag.Search
+    })"
+           class="sort-btn ms-3 @(ViewBag.SortColumn == "Price" ? "active-sort" : "")">
+
+            Giá
+
+            @if (ViewBag.SortColumn == "Price")
+            {
+                <i class="fa @ViewBag.IconClass ms-1"></i>
+            }
+        </a>
+
+    </div></th>
+    <div class="row g-4">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 col-lg-3">
+                <div class="card h-100 shadow-sm border-0 product-card">
+                    <img src="@Url.Content("~/Content/Images/" + item.ImageUrl)"
+                         class="card-img-top"
+                         alt="@item.ProductName">
+                    <div class="card-body d-flex flex-column">
+
+                        <h5 class="card-title fw-semibold">@item.ProductName</h5>
+
+                        @*<p class="card-text text-muted mb-2" type="hidden">
+                                ID: @item.ProductId
+                            </p>*@
+                        <p class="card-text text-muted mb-2">
+                            @item.Price vnd
+                        </p>
+                        <p class="card-text text-muted mb-2">
+                            Sản Xuất: @item.Origin
+                        </p>
+
+                        <div class="mt-auto">
+                            <a href="/Products/Edit/@item.ProductId">Edit</a>
+                            <a href="/Products/Delete/@item.ProductId">Delete</a>
+                            <a href="/Products/Detail/@item.ProductId" class="btn btn-primary w-100">
+                                <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="mt-5">
+            <ul class="pagination justify-content-center">
+
+                @for (int i = 0; i < ViewBag.NoOfPages; i++)
+                {
+                    if (i + 1 == ViewBag.Page)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link"
+                               href="@Url.Action("Index", new {
+                           page = i + 1,
+                           sortColumn = ViewBag.SortColumn,
+                           iconClass = ViewBag.IconClass,
+                           search = ViewBag.Search
+                       })">
+                                @(i + 1)
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="@Url.Action("Index", new {
+                           page = i + 1,
+                           sortColumn = ViewBag.SortColumn,
+                           iconClass = ViewBag.IconClass,
+                           search = ViewBag.Search
+                       })">
+                                @(i + 1)
+                            </a>
+                        </li>
+                    }
+                }
+
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        .product-card {
+            border-radius: 15px;
+            transition: 0.3s ease;
+        }
+
+            .product-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            }
+
+        .card-img-top {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            object-fit: cover;
+            height: 180px;
+        }
+
+        .sort-btn {
+            text-decoration: none;
+            color: #333;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: #f1f3f5;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+            .sort-btn:hover {
+                background: #dbeafe;
+                color: #0d6efd;
+            }
+
+        .active-sort {
+            background: #0d6efd;
+            color: white !important;
+        }
+    </style>

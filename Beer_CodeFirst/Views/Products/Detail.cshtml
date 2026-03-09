@@ -1,0 +1,64 @@
+﻿@model Beer_CodeFirst.Models.Product
+
+<div class="row">
+
+    <!-- Ảnh sản phẩm -->
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <img src="https://via.placeholder.com/500x400"
+                 class="img-fluid rounded"
+                 alt="@Model.ProductName">
+        </div>
+    </div>
+
+    <!-- Thông tin sản phẩm -->
+    <div class="col-md-6">
+
+        <h2 class="fw-bold">@Model?.ProductName</h2>
+
+        <h4 class="text-danger my-3">
+            @String.Format("{0:N0} VNĐ", Model.Price)
+        </h4>
+
+        <p class="text-muted">
+            @Model.Description
+        </p>
+
+        <div class="d-flex gap-3 mt-4">
+
+            <button class="btn btn-primary px-4">
+                <a href="@Url.Action("AddToCart","Cart", new { id = Model.ProductId })"
+                   class="btn btn-primary">
+                    🛒 Thêm vào giỏ
+                </a>
+            </button>
+            <button class="btn btn-primary"
+                    onclick="location.href='@Url.Action("Index","Payments")'">
+                Thanh toán
+            </button>
+
+            <a href="@Url.Action("Index","Products")"
+               class="btn btn-outline-secondary">
+                ← Quay lại
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+<hr class="my-5" />
+
+<!-- Thông tin thêm -->
+<div class="card border-0 shadow-sm p-4">
+    <h5 class="fw-semibold mb-3">Thông tin chi tiết</h5>
+
+    <ul class="list-unstyled">
+        <li><strong>Mã sản phẩm:</strong> @Model.ProductId</li>
+        <li><strong>Danh mục:</strong> @Model.CategoryId</li>
+        <li><strong>Nồng độ cồn:</strong> @Model.AlcoholContent %</li>
+        <li><strong>Dung tích:</strong> @Model.Volume ml</li>
+        <li><strong>Xuất xứ:</strong> @Model.Origin</li>
+        <li><strong>Tồn kho:</strong> @Model.StockQuantity</li>
+    </ul>
+</div>

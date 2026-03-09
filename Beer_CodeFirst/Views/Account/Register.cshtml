@@ -1,0 +1,67 @@
+﻿@model Beer_CodeFirst.ModelView.RegisterVM
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Create Account</h3>
+                </div>
+
+                <div class="card-body">
+
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+                    {
+
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(temp => temp.UserName)
+                            @Html.TextBoxFor(temp => temp.UserName,
+                                new { @class = "form-control", placeholder = "Enter Username" })
+                            @Html.ValidationMessageFor(temp => temp.UserName, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(temp => temp.Password)
+                            @Html.PasswordFor(temp => temp.Password,
+                                new { @class = "form-control", placeholder = "Enter Password" })
+                            @Html.ValidationMessageFor(temp => temp.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(temp => temp.ConfirmPassword)
+                            @Html.PasswordFor(temp => temp.ConfirmPassword,
+                                new { @class = "form-control", placeholder = "Confirm Password" })
+                            @Html.ValidationMessageFor(temp => temp.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(temp => temp.Email)
+                            @Html.PasswordFor(temp => temp.Email,
+                                new { @class = "form-control", placeholder = "Email" })
+                            @Html.ValidationMessageFor(temp => temp.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Register
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            Already have account?
+                            <a href="/Account/Login">Login</a>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+﻿SELECT UserName FROM AspNetUsers
