@@ -1,10 +1,12 @@
 ﻿<!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - BeerShop</title>
 
+    ```
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -12,11 +14,13 @@
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
-    <!-- THREE (chỉ load 1 lần) -->
+    <!-- THREE -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
-    <script src="~/Scripts//jquery-3.7.0.js"></script>
+
+    <script src="~/Scripts/jquery-3.7.0.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
     <style>
         .navbar a {
             color: white !important;
@@ -29,7 +33,7 @@
             transition: 0.3s;
         }
 
-        /* ===== NAVBAR ===== */
+        /* NAVBAR */
         .navbar-main {
             position: fixed;
             top: 0;
@@ -40,7 +44,6 @@
             transition: 0.3s;
         }
 
-        /* DARK (HOME) */
         .dark {
             background: #071426;
         }
@@ -50,12 +53,6 @@
                 color: white !important;
             }
 
-                .dark .nav-link:hover,
-                .dark .nav-link.active {
-                    color: #00ffcc !important;
-                }
-
-        /* LIGHT (Product) */
         .light {
             background: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
@@ -66,12 +63,7 @@
                 color: #071426 !important;
             }
 
-                .light .nav-link:hover,
-                .light .nav-link.active {
-                    color: #1e90ff !important;
-                }
-
-        /* ===== HERO ===== */
+        /* HERO */
         .hero {
             height: 100vh;
             position: relative;
@@ -107,7 +99,6 @@
             margin: 20px 0 40px;
         }
 
-        /* ===== PAGE CONTENT ===== */
         .page-content {
             background: white;
             color: black;
@@ -120,7 +111,6 @@
             color: white;
         }
 
-        /* 3D background */
         #bg3d {
             position: fixed;
             top: 0;
@@ -131,6 +121,8 @@
             background: #071426;
         }
     </style>
+    ```
+
 </head>
 
 <body class="@ViewBag.NavTheme">
@@ -138,10 +130,11 @@
     <div id="bg3d"></div>
 
     <!-- NAVBAR -->
+
     <nav class="navbar navbar-expand-lg navbar-main @ViewBag.NavTheme">
         <div class="container-fluid">
 
-            <a class="navbar-brand" href="@Url.Action("Admin", "Home")">
+            <a class="navbar-brand" href="@Url.Action("Admin","Home")">
                 BeerShop
             </a>
 
@@ -152,75 +145,44 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
 
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Home"?"active":"")"
-                           href="@Url.Action("Admin","Home")">
-                            Trang chủ
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Product"?"active":"")"
-                           href="@Url.Action("Admin","Products")">
-                            Sản phẩm
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Categories"?"active":"")"
-                           href="@Url.Action("Admin","Categories")">
-                            Danh mục
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Categories"?"active":"")"
-                           href="@Url.Action("Admin","Categories")">
-                            thuong hieu
-                        </a>
-                    </li>
-
-                    @if (User.Identity.IsAuthenticated)
+                    <!-- Trang chủ -->
+                    <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Home", new { area = "Admin" })"> Trang chủ </a> </li> <!-- Sản phẩm -->
+                    <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Products", new { area = "Admin" })"> Sản phẩm </a> </li> <!-- Danh mục -->
+                    <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Categories", new { area = "Admin" })"> Danh mục </a> </li> <!-- Người dùng -->
+                    <li class="nav-item"> <a class="nav-link" href="@Url.Action("Index","Users", new { area = "Admin" })"> Người dùng </a> </li> <!-- Login info --> @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-item">
-                            <a class="nav-link" href="/account/logout">Logout</a>
-                        </li>
-                    }
-                 
-                    }
+                        <li class="nav-item"> <span class="nav-link text-warning fw-bold"> Hello @User.Identity.Name </span> </li>
+                        <a class="nav-link" href="@Url.Action("Logout","Account", new { area = "" })"> Logout </a>}
+
                 </ul>
             </div>
 
-
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div style="color" : red;font-weight : bold">
-                    Hello @User.Identity.Name
-                </div>
-            }
         </div>
-
-
-
     </nav>
 
-    <!-- HERO chỉ ở Home -->
     @if (ViewContext.RouteData.Values["controller"].ToString() == "Admin")
     {
+
         <section class="hero">
+
             <canvas id="canvas3d"></canvas>
 
             <div class="hero-content">
                 <h1>Transform Your Digital Experience</h1>
                 <p>Discover innovative solutions that drive growth and elevate your business.</p>
 
-                <a href="@Url.Action("Admin","Product")" class="btn btn-dark me-3">Get Started →</a>
-                <a href="#" class="btn btn-outline-light">Learn More</a>
+                <a href="@Url.Action("Admin","Product")" class="btn btn-dark me-3">
+                    Get Started →
+                </a>
+
+                <a href="#" class="btn btn-outline-light">
+                    Learn More
+                </a>
             </div>
+
         </section>
     }
 
-    <!-- PAGE CONTENT -->
     <div class="page-content">
         <div class="container">
             @RenderBody()
@@ -231,10 +193,8 @@
         © @DateTime.Now.Year - BeerShop
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- GSAP animation -->
     <script>
         if (document.querySelector(".hero")) {
             gsap.from(".hero h1", { y: 100, opacity: 0, duration: 1.2 });
@@ -243,18 +203,23 @@
         }
     </script>
 
-    <!-- THREE HERO OBJECT -->
     <script>
         if (document.getElementById("canvas3d")) {
 
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("canvas3d"), alpha: true });
+
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById("canvas3d"),
+                alpha: true
+            });
+
             renderer.setSize(window.innerWidth, window.innerHeight);
 
             camera.position.z = 5;
 
             const geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16);
+
             const material = new THREE.MeshStandardMaterial({
                 color: 0x00ffcc,
                 metalness: 0.7,
@@ -274,6 +239,7 @@
                 mesh.rotation.y += 0.005;
                 renderer.render(scene, camera);
             }
+
             animate();
 
             window.addEventListener("resize", () => {
@@ -281,6 +247,7 @@
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
             });
+
         }
     </script>
 

@@ -78,7 +78,17 @@ namespace Beer_CodeFirst.Controllers
 
                 var userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
                 authenManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, userIdentity);
-                return RedirectToAction("Index", "Home");
+
+
+                if (userManager.IsInRole(user.Id, "Admin"))
+                    {
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+
+                }
 
             }
             else

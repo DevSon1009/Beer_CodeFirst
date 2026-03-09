@@ -1,0 +1,25 @@
+﻿@model List<Beer_CodeFirst.Identity.AppUser>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>User</h2>
+<table class="table table-bordered">
+
+    <tr>
+
+        <th>Username</th>
+        <th>Email</th>
+        <th>>Mobile</th>
+        <th>Address</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.UserName</td>
+            <td>@item.Email</td>
+            <td>@item.PhoneNumber</td>
+            <td>@item.Address</td>
+        </tr>
+    }
+</table>
