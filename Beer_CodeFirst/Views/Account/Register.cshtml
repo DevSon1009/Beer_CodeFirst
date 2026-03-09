@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -19,43 +22,69 @@
                     @using (Html.BeginForm("Register", "Account", FormMethod.Post))
                     {
 
+                        <!-- USERNAME -->
                         <div class="form-group mb-3">
-                            @Html.LabelFor(temp => temp.UserName)
-                            @Html.TextBoxFor(temp => temp.UserName,
+                            @Html.LabelFor(m => m.UserName)
+                            @Html.TextBoxFor(m => m.UserName,
                                 new { @class = "form-control", placeholder = "Enter Username" })
-                            @Html.ValidationMessageFor(temp => temp.UserName, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group mb-3">
-                            @Html.LabelFor(temp => temp.Password)
-                            @Html.PasswordFor(temp => temp.Password,
-                                new { @class = "form-control", placeholder = "Enter Password" })
-                            @Html.ValidationMessageFor(temp => temp.Password, "", new { @class = "text-danger" })
+
+                        <!-- PASSWORD -->
+                        <div class="form-group mb-3 position-relative">
+                            @Html.LabelFor(m => m.Password)
+
+                            @Html.PasswordFor(m => m.Password,
+                                new { @class = "form-control", placeholder = "Enter Password", id = "password" })
+
+                            <i class="fa fa-eye"
+                               onclick="togglePassword('password',this)"
+                               style="position:absolute; right:15px; top:38px; cursor:pointer;">
+                            </i>
+
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group mb-3">
-                            @Html.LabelFor(temp => temp.ConfirmPassword)
-                            @Html.PasswordFor(temp => temp.ConfirmPassword,
-                                new { @class = "form-control", placeholder = "Confirm Password" })
-                            @Html.ValidationMessageFor(temp => temp.ConfirmPassword, "", new { @class = "text-danger" })
+
+                        <!-- CONFIRM PASSWORD -->
+                        <div class="form-group mb-3 position-relative">
+                            @Html.LabelFor(m => m.ConfirmPassword)
+
+                            @Html.PasswordFor(m => m.ConfirmPassword,
+                                new { @class = "form-control", placeholder = "Confirm Password", id = "confirmPassword" })
+
+                            <i class="fa fa-eye"
+                               onclick="togglePassword('confirmPassword',this)"
+                               style="position:absolute; right:15px; top:38px; cursor:pointer;">
+                            </i>
+
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
                         </div>
 
+
+                        <!-- EMAIL -->
                         <div class="form-group mb-3">
-                            @Html.LabelFor(temp => temp.Email)
-                            @Html.PasswordFor(temp => temp.Email,
-                                new { @class = "form-control", placeholder = "Email" })
-                            @Html.ValidationMessageFor(temp => temp.Email, "", new { @class = "text-danger" })
+                            @Html.LabelFor(m => m.Email)
+                            @Html.TextBoxFor(m => m.Email,
+                                new { @class = "form-control", placeholder = "Enter Email", type = "email" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                         </div>
+
+
+                        <!-- BUTTON -->
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-block">
+                            <button type="submit" class="btn btn-primary">
                                 Register
                             </button>
                         </div>
+
 
                         <div class="text-center mt-3">
                             Already have account?
                             <a href="/Account/Login">Login</a>
                         </div>
+
                     }
 
                 </div>
@@ -65,3 +94,25 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+function togglePassword(id, icon) {
+
+    var input = document.getElementById(id);
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    }
+    else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+
+}
+
+</script>

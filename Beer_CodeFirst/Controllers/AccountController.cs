@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Beer_CodeFirst.Identity;
+using Beer_CodeFirst.Models;
+using Beer_CodeFirst.ModelView;
+using Beer_CodeFirst.Services;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
-using Beer_CodeFirst.Identity;
-using Beer_CodeFirst.Models;
-using Beer_CodeFirst.ModelView;
 using System.Web.Helpers;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
+using System.Web.Mvc;
 
 namespace Beer_CodeFirst.Controllers
 {
@@ -40,12 +41,18 @@ namespace Beer_CodeFirst.Controllers
                 if (result.Succeeded)
                 {
                     userManager.AddToRole(user.Id, "Customer");
+
+                    // GỬI EMAIL
+                    EmailService.SendEmail(
+                        user.Email,
+                        "Welcome to Beer Shop",
+                        "Your account has been created successfully."
+                    );
+
                     var authenManager = HttpContext.GetOwinContext().Authentication;
 
                     var userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
                     authenManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, userIdentity);
-
-
                 }
                 return RedirectToAction("Index", "Home");
 
@@ -78,7 +85,17 @@ namespace Beer_CodeFirst.Controllers
 
                 var userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
                 authenManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, userIdentity);
-                return RedirectToAction("Index", "Home");
+
+
+                if (userManager.IsInRole(user.Id, "Admin"))
+                    {
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+
+                }
 
             }
             else

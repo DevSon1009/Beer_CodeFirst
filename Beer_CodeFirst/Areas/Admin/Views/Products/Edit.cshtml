@@ -1,0 +1,30 @@
+﻿@model Beer_CodeFirst.Models.Product
+
+@{
+    ViewBag.Title = "Edit Product";
+}
+
+<h2>Sửa sản phẩm</h2>
+
+@using (Html.BeginForm("Edit", "Products", new { area = "Admin" }))
+{
+    @Html.HiddenFor(m => m.ProductId)
+
+<div class="mb-3">
+    <label>Tên sản phẩm</label>
+    @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control" })
+
+    <label>Giá sản phẩm</label>
+    @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type = "number", step = "0.01" })
+</div>
+
+    <br />
+
+    <button type="submit" class="btn btn-warning">
+        Cập nhật
+    </button>
+
+    <a href="@Url.Action("Index")" class="btn btn-secondary">
+        Quay lại
+    </a>
+}

@@ -1,9 +1,9 @@
 ﻿@model Beer_CodeFirst.Models.Product
-<form action="~/Products/Create" method="post">
+
 
     <h2 class="mb-4 fw-bold">➕ Thêm sản phẩm mới</h2>
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Create", "Products", new { area ="Admin" }, FormMethod.Post, new {enctype="multipart/dorm-data"}))
     {
         @Html.AntiForgeryToken()
 
@@ -95,4 +95,3 @@
 
         </div>
     }
-</form>
