@@ -40,5 +40,6 @@ namespace Beer_CodeFirst.Models
       
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
+        //private ProductService _productService = new ProductService();
     }
 }

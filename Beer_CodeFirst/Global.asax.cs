@@ -12,6 +12,9 @@ namespace Beer_CodeFirst
     {
         protected void Application_Start()
         {
+            // Ép toàn bộ ứng dụng dùng TLS 1.2 ngay khi khởi động
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

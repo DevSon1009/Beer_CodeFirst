@@ -1,4 +1,5 @@
-﻿using Beer_CodeFirst.Models;
+﻿using Beer_CodeFirst.Filters;
+using Beer_CodeFirst.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using System.Web.Mvc;
 
 namespace Beer_CodeFirst.Controllers
 {
+
+    [MyAuthenFilter]
     public class CategoriesController : Controller
     {
         // GET: Categories

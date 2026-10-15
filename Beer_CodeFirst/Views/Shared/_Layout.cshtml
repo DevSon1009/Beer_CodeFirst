@@ -5,23 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - BeerShop</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
-    <!-- THREE (chỉ load 1 lần) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script>
-    <script src="~/Scripts//jquery-3.7.0.js"></script>
+
+    <script src="~/Scripts/jquery-3.7.0.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
-    <style>
-        .navbar a {
-            color: white !important;
-        }
 
+    <style>
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
@@ -29,7 +23,7 @@
             transition: 0.3s;
         }
 
-        /* ===== NAVBAR ===== */
+        /* ===== NAVBAR STYLE ===== */
         .navbar-main {
             position: fixed;
             top: 0;
@@ -37,41 +31,99 @@
             height: 80px;
             padding: 0 80px;
             z-index: 1000;
-            transition: 0.3s;
+            transition: all 0.35s ease;
+            display: flex;
+            align-items: center;
         }
 
-        /* DARK (HOME) */
+        .navbar-scroll {
+            backdrop-filter: blur(10px);
+            background: rgba(7,20,38,0.6);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .navbar-main .nav-link {
+            font-weight: 500;
+            margin: 0 8px;
+            color: white !important;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #00ffcc !important;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        /* Themes */
         .dark {
             background: #071426;
         }
 
-            .dark .nav-link,
-            .dark .navbar-brand {
-                color: white !important;
-            }
-
-                .dark .nav-link:hover,
-                .dark .nav-link.active {
-                    color: #00ffcc !important;
-                }
-
-        /* LIGHT (Product) */
         .light {
             background: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
-            .light .nav-link,
-            .light .navbar-brand {
+            .light .nav-link, .light .navbar-brand {
                 color: #071426 !important;
             }
 
-                .light .nav-link:hover,
-                .light .nav-link.active {
-                    color: #1e90ff !important;
-                }
+        /* ===== CART BADGE ===== */
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -8px;
+            background-color: #00ffcc;
+            color: #071426;
+            font-size: 10px;
+            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 8px rgba(0,255,204,0.5);
+        }
 
-        /* ===== HERO ===== */
+        .light .cart-badge {
+            background-color: #1e90ff;
+            color: white;
+        }
+
+        /* ===== USER PROFILE ===== */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg,#00ffcc,#1e90ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #00ffcc;
+            text-decoration: none;
+        }
+
+        /* ===== HERO & CONTENT ===== */
         .hero {
             height: 100vh;
             position: relative;
@@ -96,31 +148,13 @@
             max-width: 700px;
         }
 
-        .hero h1 {
-            font-size: 70px;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 20px;
-            opacity: 0.8;
-            margin: 20px 0 40px;
-        }
-
-        /* ===== PAGE CONTENT ===== */
         .page-content {
             background: white;
             color: black;
             padding: 80px 0;
+            min-height: 600px;
         }
 
-        footer {
-            background: #111;
-            padding: 40px 0;
-            color: white;
-        }
-
-        /* 3D background */
         #bg3d {
             position: fixed;
             top: 0;
@@ -134,147 +168,112 @@
 </head>
 
 <body class="@ViewBag.NavTheme">
-
     <div id="bg3d"></div>
 
-    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-main @ViewBag.NavTheme">
         <div class="container-fluid">
-
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
-                BeerShop
-            </a>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">BeerShop</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Home"?"active":"")"
-                           href="@Url.Action("Index","Home")">
-                            Trang chủ
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Product"?"active":"")"
-                           href="@Url.Action("Index","Products")">
-                            Sản phẩm
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Categories"?"active":"")"
-                           href="@Url.Action("Index","Categories")">
-                            Danh mục
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString()=="Categories"?"active":"")"
-                           href="@Url.Action("Index","Categories")">
-                            thuong hieu
-                        </a>
-                    </li>
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Products")">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" href="@Url.Action("Index","Categories")">Danh mục</a></li>
 
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-item">
-                            <a class="nav-link" href="/account/logout">Logout</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/account/logout">Logout</a></li>
                     }
                     else
                     {
-                        <li class="nav-item">
-                            <a class="nav-link" href="/account/register">Register</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/account/login">Login</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/account/register">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/account/login">Login</a></li>
                     }
+
+                    <li class="nav-item position-relative ms-2">
+                        <a class="nav-link" href="@Url.Action("Index", "Cart")">
+                            <i class="bi bi-cart-fill fs-4"></i>
+                            @{
+                                var cart = Session["Cart"] as List<Beer_CodeFirst.Models.CartItem>;
+                                int count = cart != null ? cart.Sum(x => x.Quantity) : 0;
+                            }
+                            @if (count > 0)
+                            {
+                                <span class="cart-badge">@count</span>
+                            }
+                        </a>
+                    </li>
                 </ul>
             </div>
 
-
-            @if (User.Identity.IsAuthenticated){
-                <div style="color" : red;font-weight : bold">
-                    Hello @User.Identity.Name
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="user-profile ms-3">
+                    <div class="avatar"><i class="bi bi-person-fill"></i></div>
+                    <div class="user-info">
+                        <a href="/Account/Profile" class="user-name">@User.Identity.Name</a>
+                    </div>
                 </div>
             }
         </div>
-
-
-
     </nav>
 
-    <!-- HERO chỉ ở Home -->
     @if (ViewContext.RouteData.Values["controller"].ToString() == "Home")
     {
         <section class="hero">
             <canvas id="canvas3d"></canvas>
-
             <div class="hero-content">
-                <h1>Hoàng Sơn Bia Việt,Diệt Mọi Đối Thủ</h1>
-                <p>uống Là nghiện,Nhìn là thèm,Mua là tới.</p>
-
-                <a href="@Url.Action("Index","Product")" class="btn btn-dark me-3">Get Started →</a>
-                <a href="#" class="btn btn-outline-light">Learn More</a>
+                <h1>Hoàng Sơn Bia Việt, Diệt Mọi Đối Thủ</h1>
+                <p>Uống là nghiện, Nhìn là thèm, Mua là tới.</p>
+                <a href="@Url.Action("Index","Products")" class="btn btn-dark me-3 shadow">Get Started →</a>
             </div>
         </section>
     }
 
-    <!-- PAGE CONTENT -->
     <div class="page-content">
         <div class="container">
             @RenderBody()
         </div>
     </div>
 
-    <footer class="text-center">
-        © @DateTime.Now.Year - BeerShop
+    <footer class="text-center py-4">
+        © @DateTime.Now.Year - BeerShop - Design by HaiSonDev
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- GSAP animation -->
     <script>
+        // GSAP
         if (document.querySelector(".hero")) {
             gsap.from(".hero h1", { y: 100, opacity: 0, duration: 1.2 });
             gsap.from(".hero p", { y: 50, opacity: 0, delay: 0.3 });
-            gsap.from(".hero a", { y: 30, opacity: 0, stagger: 0.2, delay: 0.6 });
         }
-    </script>
 
-    <!-- THREE HERO OBJECT -->
-    <script>
+        // Navbar Scroll
+        window.addEventListener("scroll", function () {
+            const navbar = document.querySelector(".navbar-main");
+            if (window.scrollY > 50) navbar.classList.add("navbar-scroll");
+            else navbar.classList.remove("navbar-scroll");
+        });
+
+        // THREE.js Hero
         if (document.getElementById("canvas3d")) {
-
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("canvas3d"), alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-
             camera.position.z = 5;
-
             const geometry = new THREE.TorusKnotGeometry(1, 0.3, 100, 16);
-            const material = new THREE.MeshStandardMaterial({
-                color: 0x00ffcc,
-                metalness: 0.7,
-                roughness: 0.2
-            });
-
+            const material = new THREE.MeshStandardMaterial({ color: 0x00ffcc, metalness: 0.7, roughness: 0.2 });
             const mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
-
             const light = new THREE.PointLight(0xffffff, 1);
             light.position.set(5, 5, 5);
             scene.add(light);
-
             function animate() {
                 requestAnimationFrame(animate);
                 mesh.rotation.x += 0.003;
@@ -282,16 +281,8 @@
                 renderer.render(scene, camera);
             }
             animate();
-
-            window.addEventListener("resize", () => {
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-            });
         }
     </script>
-
     @RenderSection("scripts", required: false)
-
 </body>
 </html>

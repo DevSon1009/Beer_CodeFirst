@@ -1,0 +1,82 @@
+﻿@model Beer_CodeFirst.Models.Order
+
+@{
+    ViewBag.Title = $"Chi tiết đơn hàng #{Model.OrderId}";
+   
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Chi tiết đơn hàng # @Model.OrderId</h2>
+    <a href="@Url.Action("Index", "Orders", new { area = "Admin" })"
+       class="btn btn-secondary">← Quay lại danh sách</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header bg-light">
+                <strong>Thông tin khách hàng</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>User ID:</strong> @Model.UserId</p>
+                <p><strong>Số điện thoại:</strong> @Model.Phone</p>
+                <p><strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress</p>
+                <p><strong>Ghi chú:</strong> @(string.IsNullOrEmpty(Model.Note) ? "Không có" : Model.Note)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header bg-light">
+                <strong>Thông tin thanh toán</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Phương thức:</strong> @Model.PaymentMethod</p>
+                <p>
+                    <strong>Trạng thái thanh toán:</strong>
+                    <span class="badge @(Model.PaymentStatus == "Success" ? "bg-success" : "bg-warning")">
+                        @Model.PaymentStatus
+                    </span>
+                </p>
+                <p><strong>Mã giao dịch (Transaction ID):</strong> @Model.TransactionId</p>
+                <p>
+                    <strong>Ngày thanh toán:</strong>
+                    @(Model.PaymentDate?.ToString("dd/MM/yyyy HH:mm") ?? "Chưa thanh toán")
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h4>Danh sách sản phẩm trong đơn hàng</h4>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Product ID</th>
+            <th>Số lượng</th>
+            <th class="text-end">Đơn giá lúc đặt</th>
+            <th class="text-end">Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.ProductId</td>
+                <td>@item.Quantity</td>
+                <td class="text-end">@item.PriceAtOrder.ToString("N0") ₫</td>
+                <td class="text-end">@(item.Quantity * item.PriceAtOrder).ToString("N0") ₫</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr class="fw-bold">
+            <td colspan="3" class="text-end">Tổng cộng</td>
+            <td class="text-end">@Model.TotalAmount.ToString("N0") ₫</td>
+        </tr>
+    </tfoot>
+</table>

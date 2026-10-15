@@ -1,0 +1,30 @@
+﻿    @{
+        ViewBag.Title = "Xác nhận đăng ký";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <div class="container" style="margin-top: 50px;">
+        <div class="alert alert-info text-center">
+            <h2><i class="fas fa-envelope"></i> Kiểm tra email của bạn!</h2>
+            <p style="font-size: 16px; margin-top: 20px;">
+                @ViewBag.Message
+            </p>
+            <p>Vui lòng kiểm tra hộp thư đến (cả mục Spam) và nhấp vào link xác nhận để kích hoạt tài khoản.</p>
+            <div class="mt-4">
+                <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Quay lại đăng nhập</a>
+                <button id="resendBtn" class="btn btn-warning ml-2">Gửi lại email xác nhận</button>
+            </div>
+            <div id="resendMessage" class="mt-3"></div>
+        </div>
+    </div>
+
+    @section scripts {
+        <script>
+            $('#resendBtn').click(function() {
+                var email = '@TempData["Email"]';
+                $.post('@Url.Action("ResendConfirmation", "Account")', { email: email }, function(response) {
+                    $('#resendMessage').html('<div class="alert alert-' + (response.success ? 'success' : 'danger') + '">' + response.message + '</div>');
+                });
+            });
+        </script>
+    }

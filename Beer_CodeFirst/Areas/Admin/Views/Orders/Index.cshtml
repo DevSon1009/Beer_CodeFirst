@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Beer_CodeFirst.Models.Order>
+
+@{
+    ViewBag.Title = "Quản lý Đơn hàng";
+   
+}
+
+<h2 class="mb-4">📋 Quản lý Đơn hàng</h2>
+
+<!-- Bộ lọc trạng thái thanh toán -->
+@using (Html.BeginForm("Index", "Orders", FormMethod.Get, new { area = "Admin" }))
+{
+    <div class="row mb-4">
+        <div class="col-md-5">
+            <label>Lọc theo trạng thái thanh toán:</label>
+            @Html.DropDownList("paymentStatus",
+                (IEnumerable<SelectListItem>)ViewBag.PaymentStatuses,
+                new { @class = "form-control", onchange = "this.form.submit()" })
+        </div>
+    </div>
+}
+
+<table class="table table-bordered table-hover table-striped align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th style="width: 100px">Mã đơn</th>
+            <th>Ngày đặt hàng</th>
+            <th class="text-end">Tổng tiền</th>
+            <th>Phương thức</th>
+            <th>Trạng thái thanh toán</th>
+            <th>Trạng thái đơn</th>
+            <th style="width: 120px">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><strong>#@item.OrderId</strong></td>
+                <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                <td class="text-end fw-bold">@item.TotalAmount.ToString("N0") ₫</td>
+                <td>@(string.IsNullOrEmpty(item.PaymentMethod) ? "MoMo" : item.PaymentMethod)</td>
+                <td>
+                    @switch (item.PaymentStatus?.ToLower())
+                    {
+                        case "success":
+                            <span class="badge bg-success">✅ Thành công</span>
+                            break;
+                        case "cancelled":
+                            <span class="badge bg-danger">❌ Đã hủy</span>
+                            break;
+                        case "failed":
+                            <span class="badge bg-warning">⚠️ Thất bại</span>
+                            break;
+                        default:
+                            <span class="badge bg-secondary">⏳ @item.PaymentStatus</span>
+                            break;
+                    }
+                </td>
+                <td>@item.Status</td>
+                <td>
+                    <a href="@Url.Action("Details", "Orders", new { area = "Admin", id = item.OrderId })"
+                       class="btn btn-primary btn-sm">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        Không có đơn hàng nào phù hợp với bộ lọc hiện tại.
+    </div>
+}

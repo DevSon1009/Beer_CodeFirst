@@ -20,5 +20,32 @@ namespace Beer_CodeFirst.Areas.Admin.Controllers
 
             return View(users);
         }
+
+
+
+
+        public ActionResult Delete(string id)
+        {
+            using (var db = new AppDbContext())
+            {
+                var user = db.Users.Find(id);
+
+                if (user.UserName == "Admin")
+                {
+                    TempData["Error"] = "Không thể xóa tài khoản Admin!";
+                    return RedirectToAction("Index");
+                }
+
+                db.Users.Remove(user);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
+
+
+
+
 }

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Beer_CodeFirst.Models.CartItem>
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 fw-bold">Giỏ hàng của bạn</h2>
+
+    <div class="card shadow-sm border-0 p-4">
+        <table class="table align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th class="text-center">Giá</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-end">Thành tiền</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">@item.ProductName</td>
+                            <td class="text-center">@item.Price.ToString("N0") VNĐ</td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center align-items-center gap-2">
+                                    <a href="@Url.Action("UpdateQuantity", "Cart", new { id = item.ProductId, amount = -1 })"
+                                       class="btn btn-sm btn-outline-secondary px-2">-</a>
+                                    <span class="fw-bold" style="min-width: 20px;">@item.Quantity</span>
+                                    <a href="@Url.Action("UpdateQuantity", "Cart", new { id = item.ProductId, amount = 1 })"
+                                       class="btn btn-sm btn-outline-secondary px-2">+</a>
+                                </div>
+                            </td>
+                            <td class="text-end fw-bold text-primary">@((item.Price * item.Quantity).ToString("N0")) VNĐ</td>
+                            <td class="text-center">
+                                <a href="@Url.Action("RemoveFromCart", "Cart", new { id = item.ProductId })"
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('Sơn chắc chắn muốn bỏ món này chứ?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            Giỏ hàng đang trống. Đi mua bia thôi Sơn ơi!
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <a href="@Url.Action("Index", "Products")" class="btn btn-outline-dark">
+                        <i class="bi bi-arrow-left"></i> Tiếp tục mua hàng
+                    </a>
+                </div>
+
+                <div class="text-end">
+                    <h4 class="text-danger fw-bold">
+                        Tổng cộng: @Model.Sum(x => x.Price * x.Quantity).ToString("N0") VNĐ
+                    </h4>
+
+                    <!-- Nút thanh toán MoMo đã sửa đúng POST -->
+                    @using (Html.BeginForm("Payment", "Cart", FormMethod.Post))
+                    {
+                        <button type="submit" class="btn btn-success btn-lg px-5 mt-2 shadow-sm">
+                            Thanh toán bằng MoMo
+                            <img src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
+                                 width="28" class="ms-2" style="vertical-align:middle" />
+                        </button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

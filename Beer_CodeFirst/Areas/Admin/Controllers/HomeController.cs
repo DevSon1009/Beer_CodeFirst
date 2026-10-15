@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Beer_CodeFirst.Filters;
+using Beer_CodeFirst.Identity;
 
 namespace Beer_CodeFirst.Areas.Admin.Controllers
 {
@@ -11,6 +12,7 @@ namespace Beer_CodeFirst.Areas.Admin.Controllers
     public class HomeController : Controller
     {
         // GET: Admin/Home
+        AppDbContext db= new AppDbContext();
         public ActionResult Index()
         {
             return View();

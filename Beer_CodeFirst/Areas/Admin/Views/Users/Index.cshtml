@@ -5,14 +5,14 @@
 
 <h2>User</h2>
 <table class="table table-bordered">
-
     <tr>
-
         <th>Username</th>
         <th>Email</th>
-        <th>>Mobile</th>
+        <th>Mobile</th>
         <th>Address</th>
+        <th>Action</th>
     </tr>
+
     @foreach (var item in Model)
     {
         <tr>
@@ -20,6 +20,11 @@
             <td>@item.Email</td>
             <td>@item.PhoneNumber</td>
             <td>@item.Address</td>
+
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id },
+                new { @class = "btn btn-danger btn-sm", onclick = "return confirm('Xóa user này?');" })
+            </td>
         </tr>
     }
 </table>

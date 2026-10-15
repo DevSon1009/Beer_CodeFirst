@@ -10,10 +10,11 @@ namespace Beer_CodeFirst.ModelView
     {
         [Required(ErrorMessage = "Username is required")]
         public string UserName { get; set; }
-        [Required(ErrorMessage = "Email is required")]
+
+        [Required(ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Confirm Password is required")]
-        [Compare("Password", ErrorMessage = "Password and Confirm Password do not match")]
-        public string ConfirmPassword { get; set; }
+
+        public bool RememberMe { get; set; }
     }
 }
