@@ -38,7 +38,7 @@ namespace Beer_CodeFirst.Areas.Admin.Controllers
 
                 db.Users.Remove(user);
                 db.SaveChanges();
-            }
+    }
 
             return RedirectToAction("Index");
         }

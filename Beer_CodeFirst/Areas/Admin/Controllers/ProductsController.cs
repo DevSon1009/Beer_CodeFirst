@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+//using System.Windows.Controls;
+using System.Data.Entity;
 
 namespace Beer_CodeFirst.Areas.Admin.Controllers
 {
